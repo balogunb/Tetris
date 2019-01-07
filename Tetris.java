@@ -79,6 +79,7 @@ public class Tetris extends GraphicsProgram{
         add(startGame,frame.getWidth()/2-startGame.getWidth()/2 ,getHeight()/2);
 
     }
+
     /**draws a random tetris piece when called */
     public void addPiece(){
         String letter = "LIOTSZ";
@@ -162,15 +163,15 @@ public class Tetris extends GraphicsProgram{
                 int jTwo = j + topBottom;
 
                 if(c[i][j] && (iTwo < 0|| iTwo >= size|| jTwo >= size|| jTwo< 0 || !c[iTwo][jTwo]) && grid[p.getRow() + iTwo][p.getColumn() + jTwo].isVisible()){
-                    gameScore = gameScore + 1;//increase score by one after each collision
-                    score.setLabel("Score = " + gameScore );
-                    return true;
+                        gameScore = gameScore + 1;//increase score by one after each collision
+                        score.setLabel("Score = " + gameScore );
+                        return true;
+
+                    }
 
                 }
-                  
             }
-        }
-        return false;
+            return false;
 
     }
 

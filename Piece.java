@@ -119,16 +119,17 @@ public class Piece extends GCompound implements Runnable{
 
     /** in each timestep check if the piece collided and move down if it did not */
     public void oneTimeStep(){
-        if(!game.checkCollision(game.currentPiece, 1,2)){
+        //if(!game.checkCollision(game.currentPiece, 1,2)){
             moveDown();
 
-        }
+        //}
         if(game.checkCollision(game.currentPiece, 1,2)){
 
             isAlive = false; //used to stop animation if a piece collides
             game.addPiece();//add new piece every time the previous piece collides with sometime 
 
         }
+
 
     }
 
@@ -153,11 +154,13 @@ public class Piece extends GCompound implements Runnable{
     }
 
     /** moves the piece down by increasing the row number **/
-    public void moveDown(){
-        game.show(game.currentPiece,false);
-        row++;
-        game.show(game.currentPiece,true);
-
+    public void moveDown(){        
+        // Only allow move down when there is space at the bottom 
+        if(!game.checkCollision(game.currentPiece, 1,2)){
+            game.show(game.currentPiece,false);
+            row++;
+            game.show(game.currentPiece,true);
+        }
     }
 
     /** moves the piece left by decreasing the column number   */
