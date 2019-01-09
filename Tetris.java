@@ -38,6 +38,7 @@ public class Tetris extends GraphicsProgram{
     public Piece currentPiece;
     private GLabel startGame,score;
     private int gameScore;
+    private GRect restart;
 
     /** the run method, draw the inital graphics */
     public void run() {
@@ -78,14 +79,23 @@ public class Tetris extends GraphicsProgram{
         startGame.setVisible(true);
         add(startGame,frame.getWidth()/2-startGame.getWidth()/2 ,getHeight()/2);
 
+        //Restart Button 
+        restart = new GRect(0,0,50,50);
+        restart.setFillColor(Color.BLUE);
+        add(restart);
     }
 
     /**draws a random tetris piece when called */
     public void addPiece(){
         String letter = "LIOTSZ";
         int lNumber = letter.length();
-        currentPiece = new Piece(letter.charAt(rand.nextInt(lNumber)),1 ,(N_COLUMN/2) , this);
+        
+        //Use random generator to generate random piece
+        //currentPiece = new Piece(letter.charAt(rand.nextInt(lNumber)),1 ,(N_COLUMN/2) , this);
 
+        currentPiece = new Piece('O',1 ,(N_COLUMN/2) , this);
+
+        
         new Thread(currentPiece).start();//animate the tetris piece
     }
 
@@ -97,6 +107,13 @@ public class Tetris extends GraphicsProgram{
         }
 
         startGame.setVisible(false);
+
+        
+        //restart option currently used for trouble shooting 
+        if(restart.getBounds().contains(point)){
+            
+            run();
+        }
     }
 
     /** handles the key event when a key is pressed */
@@ -163,16 +180,35 @@ public class Tetris extends GraphicsProgram{
                 int jTwo = j + topBottom;
 
                 if(c[i][j] && (iTwo < 0|| iTwo >= size|| jTwo >= size|| jTwo< 0 || !c[iTwo][jTwo]) && grid[p.getRow() + iTwo][p.getColumn() + jTwo].isVisible()){
-                        gameScore = gameScore + 1;//increase score by one after each collision
-                        score.setLabel("Score = " + gameScore );
-                        return true;
-
-                    }
-
+                    gameScore = gameScore + 1;//increase score by one after each collision
+                    score.setLabel("Score = " + gameScore );
+                    return true;
                 }
             }
-            return false;
+        }
+        return false;
 
     }
+    
+    /**Checks Collision between wall */
+    public boolean checkWall(Piece p, int leftRight, int topBottom){
+        boolean [][] c = p.getCubes();
+        int size = c.length;
+        for(int i = 0;i < size;i++){
+            for(int j = 0; j < size;j++){
+                int iTwo = i  + leftRight;
+                int jTwo = j + topBottom;
+
+                if(c[i][j] && (iTwo < 0|| iTwo >= size|| jTwo >= size|| jTwo< 0 || !c[iTwo][jTwo]) && grid[p.getRow() + iTwo][p.getColumn() + jTwo].isVisible()){
+                    gameScore = gameScore + 1;//increase score by one after each collision
+                    score.setLabel("Score = " + gameScore );
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    
 
 }
